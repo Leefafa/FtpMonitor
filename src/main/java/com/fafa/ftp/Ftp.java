@@ -1,4 +1,4 @@
-package com.fafa.ftp.ftp;
+package com.fafa.ftp;
 
 import java.io.BufferedInputStream;  
 import java.io.BufferedOutputStream;  
@@ -12,7 +12,10 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPClientConfig;  
 import org.apache.commons.net.ftp.FTPFile;  
 import org.apache.commons.net.ftp.FTPReply;
-import org.apache.log4j.Logger;  
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fafa.test.sendMail;
   
 public class Ftp {  
     private FTPClient ftpClient;  
@@ -20,8 +23,8 @@ public class Ftp {
     private int intPort;  
     private String user;  
     private String password;  
-  
-    private static Logger logger = Logger.getLogger(Ftp.class.getName());  
+    
+    private static Logger logger = LoggerFactory.getLogger(Ftp.class);
   
     /* * 
      * Ftp构造函数 
@@ -54,13 +57,14 @@ public class Ftp {
                 this.ftpClient.disconnect();  
                 logger.error("登录FTP服务失败！");  
                 return isLogin;  
-            }  
-            this.ftpClient.login(this.user, this.password);  
-            // 设置传输协议  
-            this.ftpClient.enterLocalPassiveMode();  
-            this.ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);  
-            logger.info("恭喜" + this.user + "成功登陆FTP服务器");  
-            isLogin = true;  
+            }else{
+            	this.ftpClient.login(this.user, this.password);  
+            	// 设置传输协议  
+            	this.ftpClient.enterLocalPassiveMode();  
+            	this.ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);  
+            	logger.info("恭喜" + this.user + "成功登陆FTP服务器");  
+            	isLogin = true;  
+            }
         } catch (Exception e) {  
             e.printStackTrace();  
             logger.error(this.user + "登录FTP服务失败！" + e.getMessage());  
@@ -79,9 +83,9 @@ public class Ftp {
                 boolean reuslt = this.ftpClient.logout();// 退出FTP服务器  
                 if (reuslt) {  
                     logger.info("成功退出服务器");  
-                }  
-            } catch (IOException e) {  
-                e.printStackTrace();  
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
                 logger.warn("退出FTP服务器异常！" + e.getMessage());  
             } finally {  
                 try {  
@@ -89,7 +93,7 @@ public class Ftp {
                 } catch (IOException e) {  
                     e.printStackTrace();  
                     logger.warn("关闭FTP服务器的连接异常！");  
-                }  
+                } 
             }  
         }  
     }  
@@ -238,26 +242,29 @@ public class Ftp {
         return true;  
     }  
     */
-    public void listAllFiles(String remotePath){
+    public void listPendingFiles(String remotePath, int setCount){
+    	int ftpPendingNum = 0;
     	try {
-    		int cnt = 0;
 			if (remotePath.startsWith("/") && remotePath.endsWith("/")) {
 				FTPFile[] files = this.ftpClient.listFiles(remotePath);
 				for (int i = 0; i < files.length; i++) {
 					if (files[i].isDirectory()) {
-						logger.warn(remotePath + "---pending目录下包含有文件夹！");
+						logger.warn(remotePath + "---pending目录下包含有文件夹！" + files[i].getName());
 					}else if (files[i].isFile()) {
-						cnt++;
+						ftpPendingNum++;
 					}
 				}
-				logger.info(remotePath + "--共有--" + cnt +"个文件");
+				logger.info(remotePath + "--共有--" + ftpPendingNum +"个文件");
+				if (ftpPendingNum > setCount) {
+					logger.warn(remotePath + "文件数超出设定值!---PendingFileCnt---" + ftpPendingNum);
+				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("读取pending文件出错" + e.getMessage());
 		}
     }
     
-    public String listPendingPath(String remotePath){
+    public void listPendingPath(String remotePath, int setCount){
     	try {
 			if (remotePath.startsWith("/") && remotePath.endsWith("/")) {
 				FTPFile[] files = this.ftpClient.listFiles(remotePath);
@@ -266,18 +273,17 @@ public class Ftp {
 						// logger.info(remotePath + files[i].getName());
 						if (files[i].getName().equals("pending")) {
 							remotePath = remotePath + files[i].getName() + "/";
-							logger.info("listPendingPath----" + remotePath);
-							listAllFiles(remotePath);
+//							logger.info("listPendingPath----" + remotePath);
+							listPendingFiles(remotePath, setCount);
 						}else{
-							listPendingPath(remotePath + files[i].getName() + "/");
+							listPendingPath(remotePath + files[i].getName() + "/", setCount);
 						}
 					}
 				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("读取pending文件路径出错" + e.getMessage());
 		}
-		return remotePath;
     }
     
     public boolean listDirectory(String remoteDirectory) {  
@@ -294,7 +300,7 @@ public class Ftp {
             } 
         } catch (IOException e) {  
             e.printStackTrace();  
-            logger.info("读取文件夹失败！");  
+            logger.error("读取文件夹失败！");  
             return false; 
         }  
         return true;  

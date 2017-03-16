@@ -11,17 +11,15 @@
     <!-- 将DB属性配置文件位置放到列表中 -->
 	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
         <property name="locations">  
-           <list>  
+           <list>
               <!-- 推荐使用file的方式引入，这样可以将配置和代码分离 -->  
-              <value>ftp.properties</value>
-              <value>path.properties</value>
-              <value>log4j.properties</value>  
+              <value>log_config.properties</value>
             </list>  
         </property>  
     </bean>
     <!-- Link to DB Connection settings -->
 <!--     <context:property-placeholder location="classpath:conf/jdbc.properties"/> -->
-    
+
     <!--<import resource="classpath:conf/spring-mybatis.xml" />-->
     <import resource="classpath:config/spring-quartz.xml" />
     <!-- Component Scan -->

@@ -1,16 +1,12 @@
 package com.fafa.test;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.apache.log4j.Logger;
-
-import com.fafa.ftp.ftp.Ftp;
+import com.fafa.ftp.Ftp;
 import com.fafa.ftp.tools.Tools;
-import com.fafa.ftp.util.FTPUtil;
 
 /**
  * @Author Stark
@@ -18,40 +14,46 @@ import com.fafa.ftp.util.FTPUtil;
  * @File ftpTest.java
  */
 public class ftpTest {
-	private static Logger logger = Logger.getLogger(ftpTest.class);
-
+	private static Logger logger = LoggerFactory.getLogger(ftpTest.class);
+	
 	public void startMonitor() {
 		int ftpPort = 21;
+		int ftpPendingCnt = 10;
 		String ftpUserName = "";
-		String ftpPassword = "";
+		String ftpPassWord = "";
 		String ftpHost = "";
-		//String ftpPath = "";
 		List<String> readEqpList = new ArrayList<String>();
+		List<String> porps = new ArrayList<String>();
 		try {
-			InputStream in = FTPUtil.class.getClassLoader().getResourceAsStream("ftp.properties");
-			InputStream path = FTPUtil.class.getClassLoader().getResourceAsStream("path.properties");
-			if (path == null) {
-				logger.info("配置文件path.properties读取失败");
+			readEqpList = Tools.FileTools.readProperity(System.getProperty("user.dir")+"\\path.properties");
+			porps = Tools.FileTools.readProperity(System.getProperty("user.dir")+"\\ftp.properties");
+			if (readEqpList == null) {
+				logger.error("配置文件path.properties读取失败");
 			}
-			if (in == null) {
-				logger.info("配置文件ftp.properties读取失败");
-			} else {
-				Properties properties = new Properties();
-				properties.load(in);
-				ftpUserName = properties.getProperty("ftpUserName");
-				ftpPassword = properties.getProperty("ftpPassword");
-				ftpHost = properties.getProperty("ftpHost");
-				ftpPort = 21;
-				//ftpPath = properties.getProperty("ftpPath");
-		        readEqpList = Tools.FileTools.readProperity("./src/main/resources/path.properties");
+			for (String p : porps) {
+				String[] str = p.split("-");
+				if (str[0].equals("ftpHost")) {
+					ftpHost = str[1];
+					logger.info("ftpHost---" + ftpHost);
+				}
+				if (str[0].equals("ftpUserName")) {
+					ftpUserName = str[1];
+					logger.info("ftpUserName---" + ftpUserName);
+				}
+				if (str[0].equals("ftpPassWord")) {
+					ftpPassWord = str[1];
+				}
+				if (str[0].equals("ftpPendingCnt")) {
+					ftpPendingCnt = Integer.parseInt(str[1]);
+				}
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			logger.error("配置文件读取错误!" + e.getMessage());
 		}
-		Ftp ftp = new Ftp(ftpHost, ftpPort, ftpUserName, ftpPassword);
+		Ftp ftp = new Ftp(ftpHost, ftpPort, ftpUserName, ftpPassWord);
 		ftp.ftpLogin();
 		for (String path : readEqpList) {
-			ftp.listPendingPath(path);
+			ftp.listPendingPath(path, ftpPendingCnt);
 		}
 		ftp.ftpLogOut();
 		logger.info("-------------------------------------------");

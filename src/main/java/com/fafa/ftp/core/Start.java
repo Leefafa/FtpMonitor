@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.net.URL;
 
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -29,15 +27,11 @@ public class Start {
 	public static void main(String[] args) {
 		URL url = Start.class.getClassLoader().getResource("");
 		writePidFile(url);
-		@SuppressWarnings("resource")
-		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:config/applicationContext.xml"); 
-		Scheduler scheduler = (Scheduler) context.getBean( "startMonitorFactoryBean");  
-        //启动调度器  
-		try {
-			scheduler.start();
-		} catch (SchedulerException e) {
-			logger.error("启动调度器失败！" + e.getMessage());
-		}
+		ApplicationContext ctx = new ClassPathXmlApplicationContext(
+				"classpath:config" + CommonConstant.FILE_SEPARATOR
+				+ "applicationContext.xml");
+		SpringContextUtil springContext = new SpringContextUtil();
+		springContext.setApplicationContext(ctx);
 	}
 
 

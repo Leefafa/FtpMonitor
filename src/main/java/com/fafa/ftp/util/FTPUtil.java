@@ -14,12 +14,13 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;  
 import org.apache.commons.net.ftp.FTPClient;  
 import org.apache.commons.net.ftp.FTPFile;  
-import org.apache.commons.net.ftp.FTPReply;  
-import org.apache.log4j.Logger;  
+import org.apache.commons.net.ftp.FTPReply;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
   
 public class FTPUtil {  
   
-    private static final Logger logger = Logger.getLogger(FTPUtil.class);  
+	private static Logger logger = LoggerFactory.getLogger(FTPUtil.class);  
     private static String encoding = System.getProperty("file.encoding");  
       
     FTPClient client;  

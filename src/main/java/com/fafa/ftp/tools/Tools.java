@@ -8,8 +8,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Tools {
+	private static Logger logger = LoggerFactory.getLogger(Tools.class);
     public static class NetTools {
 
         public static String hostAddress() {
@@ -103,5 +106,38 @@ public class Tools {
             }
 			return eqpList;
         }
+        
+        public static long fileSize(String file){
+        	File f= new File(file);
+        	long size = 0;
+            if (f.exists() && f.isFile()){  
+            	size = f.length();
+                logger.info("length = "+f.length());
+            }else{  
+                logger.info("file doesn't exist or is not a file");  
+            } 
+			return size;
+        }
+        
+    }
+    public static String readString(String contentFile){
+    	String str="";
+    	File file=new File(contentFile);
+		FileInputStream in;
+		try {
+			in = new FileInputStream(file);
+			int size=in.available();
+			byte[] buffer=new byte[size];
+			in.read(buffer);
+			in.close();
+			str=new String(buffer,"GB2312");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// size  为字串的长度 ，这里一次性读完
+    	return str;
     }
 }
