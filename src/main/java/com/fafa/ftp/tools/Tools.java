@@ -64,7 +64,7 @@ public class Tools {
          * @param oldName  原来的文件名
          * @param newName 新文件名
          */
-        public static void renameFile(String path, String oldName, String newName) {
+        public static void deleteFile(String path, String oldName, String newName) {
 
             //新的文件名和以前文件名不同时,才有必要进行重命名
             if(!oldName.equals(newName)){
@@ -87,6 +87,11 @@ public class Tools {
             }
         }
         
+        /**
+         * 读取属性文件
+         * @param file
+         * @return
+         */
         public static List<String> readProperity(String file){
         	Properties prop = new Properties();  
         	List<String> eqpList = new ArrayList<String>();
@@ -107,6 +112,11 @@ public class Tools {
 			return eqpList;
         }
         
+        /**
+         * 判断文件大小
+         * @param file
+         * @return
+         */
         public static long fileSize(String file){
         	File f= new File(file);
         	long size = 0;
@@ -120,6 +130,11 @@ public class Tools {
         }
         
     }
+    /**
+     * 读取文件内容
+     * @param contentFile
+     * @return string
+     */
     public static String readString(String contentFile){
     	String str="";
     	File file=new File(contentFile);

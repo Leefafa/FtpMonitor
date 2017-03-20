@@ -1,2 +1,20 @@
 # FtpMonitor
-å¯¹FtpæœåŠ¡å™¨ä¸Šçš„æŒ‡å®šè·¯å¾„è¿›è¡Œæ–‡ä»¶æ•°ç›®ç›‘æ§ï¼Œå¹¶è¾“å‡ºåˆ°logæ–‡ä»¶ä¸­
+¶ÔFtp·şÎñÆ÷ÉÏµÄÖ¸¶¨Â·¾¶½øĞĞÎÄ¼şÊıÄ¿¼à¿Ø£¬²¢Êä³öµ½logÎÄ¼şÖĞ
+
+# ftp.properties
+Ftp·şÎñÆ÷ÅäÖÃ
+
+# log_config.properties
+FtpÈÕÖ¾Êä³öÂ·¾¶
+
+# path.properties
+Ftp¼à¿ØÂ·¾¶£¨±ØĞëÒÔ"/"½áÎ²£©
+
+# sender.properties
+¼à¿Ø±¨¾¯ÓÊ¼ş·¢ËÍÕß
+
+# mail.properties
+ÓÊ¼ş½ÓÊÜÕß
+
+# Message.properties
+ÓÊ¼şÕıÎÄÄÚÈİ

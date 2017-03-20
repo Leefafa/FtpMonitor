@@ -33,7 +33,7 @@
 	    </filter>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- rollover daily -->
-			<fileNamePattern>${log.path}/warn.%d{yyyy-MM-dd-HH}.%i.log
+			<fileNamePattern>${log.path}/warn.%d{yyyy-MM-dd}.%i.log
 			</fileNamePattern>
 			<maxHistory>30</maxHistory>
 			<timeBasedFileNamingAndTriggeringPolicy
@@ -56,7 +56,7 @@
 	    </filter>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- rollover daily -->
-			<fileNamePattern>${log.path}/info.%d{yyyy-MM-dd-HH}.%i.log
+			<fileNamePattern>${log.path}/info.%d{yyyy-MM-dd}.%i.log
 			</fileNamePattern>
 			<maxHistory>30</maxHistory>
 			<timeBasedFileNamingAndTriggeringPolicy

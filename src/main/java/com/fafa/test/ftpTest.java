@@ -34,11 +34,9 @@ public class ftpTest {
 				String[] str = p.split("-");
 				if (str[0].equals("ftpHost")) {
 					ftpHost = str[1];
-					logger.info("ftpHost---" + ftpHost);
 				}
 				if (str[0].equals("ftpUserName")) {
 					ftpUserName = str[1];
-					logger.info("ftpUserName---" + ftpUserName);
 				}
 				if (str[0].equals("ftpPassWord")) {
 					ftpPassWord = str[1];

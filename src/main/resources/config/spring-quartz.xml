@@ -46,7 +46,7 @@
         -->
         <!-- cron表达式 -->
         <property name="cronExpression">
-        	<value>0 0/5 * * * ?</value> <!-- 每隔20s执行 -->
+        	<value>0 0/15 * * * ?</value> <!-- 每隔20s执行 -->
         </property>
     </bean>
     
@@ -67,6 +67,7 @@
         <property name="jobDetail">
             <ref bean="fileMonitorJob"/>
         </property>
+        
         <!--
         <property name="startDelay">
             <value>5000</value>
@@ -74,7 +75,7 @@
         -->
         <!-- cron表达式 -->
         <property name="cronExpression">
-        	<value>0 0/3 * * * ?</value> <!-- 每隔60s执行 -->
+        	<value>0 0/5 * * * ?</value> <!-- 每隔60s执行 -->
         </property>
     </bean>
     
