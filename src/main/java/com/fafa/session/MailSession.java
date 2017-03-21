@@ -83,11 +83,21 @@ public class MailSession {
 	 *            发送邮件的密码
 	 */
 	public MailSession(final String username, final String password) {
-		// 针对mail.ncpd.com.cn邮箱服务
-		final String smtpHostName = "mail." + username.split("@")[1];
-		init(username, password, smtpHostName);
-		final String popHostName = "mail." + username.split("@")[1];
-		initReceive(username, password, popHostName);
+		
+		String mailAdress = username.split("@")[1];
+		if (mailAdress.equals("ncpd.com.cn")) {				// 针对mail.ncpd.com.cn邮箱服务
+			final String smtpHostName = "mail." + mailAdress;
+			init(username, password, smtpHostName);
+			final String popHostName = "mail." + mailAdress;
+			initReceive(username, password, popHostName);
+		}else {
+			final String smtpHostName = "smtp." + mailAdress;
+			init(username, password, smtpHostName);
+			final String popHostName = "pop." + mailAdress;
+			initReceive(username, password, popHostName);
+		}
+		
+		
 	}
 
 	/**
@@ -98,7 +108,7 @@ public class MailSession {
 	 * @param password
 	 *            密码
 	 * @param smtpHostName
-	 *            imap主机地址
+	 *            smtp主机地址
 	 */
 	private void init(String username, String password, String smtpHostName) {
 		// 初始化props

@@ -75,7 +75,7 @@
         -->
         <!-- cron表达式 -->
         <property name="cronExpression">
-        	<value>0 0/5 * * * ?</value> <!-- 每隔60s执行 -->
+        	<value>0 0/5 * * * ?</value> <!-- 每隔5min执行 -->
         </property>
     </bean>
     
